@@ -1,6 +1,10 @@
 .Rproj.user
 .Rhistory
-.RData
+*.RData
 .Ruserdata
-.json
-.zip
+*.json
+*.zip
+trainingSet.RData
+testSet.RData
+fold1.RData
+sampleSubmission.csv
