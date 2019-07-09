@@ -82,7 +82,7 @@ predictions %>% table
 results = data.frame(Id = 1:length(predictions), ClassLabel = predictions)
 readr::write_csv(x=results, path="submissions/submission8_really_a_decision_tree.csv")
 
-# kaggle competitions submit bigdata2019-flare-prediction -f submissions/submission8_really_a_decision_tree.csv -m "My eights submission: really a decision tree on TOTBSQ, not a logit again"
+# kaggle competitions submit bigdata2019-flare-prediction -f submissions/submission8_really_a_decision_tree.csv -m "My seventh submission: decision tree on TOTBSQ"
 
 
 
