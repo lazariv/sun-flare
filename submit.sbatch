@@ -11,7 +11,7 @@ module load modenv/ml
 ml TensorFlow
 ml R
 
-cd /lustre/scratch2/lazariv/SunFlare/
+cd /lustre/ssd/lazariv/SunFlare/
 Rscript conv_net.R 
 
 
