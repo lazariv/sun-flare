@@ -19,14 +19,16 @@ load(paste0(path_to_data, file_name))
 
 # mean/variance analysis
 #variables = c("ABSNJZH", "R_VALUE", "SAVNCPP", "TOTBSQ","TOTUSJH")
-#variables = c("TOTUSJH", "TOTBSQ")
-variables = c("EPSX", "MEANALP")
+variables = c("TOTUSJH", "TOTBSQ")
+#variables = c("EPSX", "MEANALP")
 
 summarisedTOT = data %>% 
   mutate(ID = as.factor(ID), LABEL = as.factor(LABEL), TIME=as.factor(TIME)) %>% 
   select(variables, TIME, ID, LABEL) %>% 
   group_by(ID, LABEL) %>% 
-  summarise_if(is.numeric, list(~mean(., na.rm=TRUE), ~sd(., na.rm=TRUE), ~skewness(., na.rm=TRUE)), na.rm=TRUE) 
+  #summarise_if(is.numeric, list(~mean(., na.rm=TRUE), ~sd(., na.rm=TRUE), ~skewness(., na.rm=TRUE)), na.rm=TRUE) 
+  summarise_if(is.numeric, list(~mean(., na.rm=TRUE), ~sd(., na.rm=TRUE), ~quantile(., probs=0.25, na.rm=TRUE), ~quantile(., probs=c(0.75), na.rm=TRUE)), na.rm=TRUE) 
+
 #summarisedTOT %>% na.omit() %>% 
 #  #  filter(TOTBSQ > 0 & TOTBSQ < 5e10) %>% 
 #  ggplot(aes(x=sd, y=skewness, colour=LABEL)) + geom_point(size=0.2)
@@ -52,7 +54,7 @@ summary(fit_logit)
 predicted <- plogis(predict(fit_logit, data_test[,-1]))  # predicted scores
 optCutOff <- InformationValue::optimalCutoff(data_test$LABEL, predicted)
 predictions = ifelse(predicted > optCutOff, 1, 0)  # using a cutoff = 0.5
-predictions = ifelse(predicted > .5, 1, 0)  # using a cutoff = 0.5
+#predictions = ifelse(predicted > .5, 1, 0)  # using a cutoff = 0.5
 
 # calculate metrics on test dataset
 cat("Accuracy =", MLmetrics::Accuracy(predictions, data_test$LABEL))
@@ -73,7 +75,8 @@ test_summarisedTOT = test_data %>%
   mutate(ID = as.factor(ID)) %>%
   select(variables, ID) %>%
   group_by(ID) %>%
-  summarise_if(is.numeric, list(~mean(., na.rm=TRUE), ~sd(., na.rm=TRUE), ~skewness(., na.rm=TRUE), ~kurtosis(., na.rm=TRUE)), na.rm=TRUE)
+#  summarise_if(is.numeric, list(~mean(., na.rm=TRUE), ~sd(., na.rm=TRUE), ~skewness(., na.rm=TRUE), ~kurtosis(., na.rm=TRUE)), na.rm=TRUE)
+  summarise_if(is.numeric, list(~mean(., na.rm=TRUE), ~sd(., na.rm=TRUE), ~quantile(., probs=0.25, na.rm=TRUE), ~quantile(., probs=c(0.75), na.rm=TRUE)), na.rm=TRUE) 
 
 # check for NAs
 #sum(is.na(test_summarisedTOT$TOTUSJH_mean))
@@ -92,9 +95,9 @@ predictions %>% table
 
 # write submission file
 results = data.frame(Id = 1:length(predictions), ClassLabel = predictions)
-readr::write_csv(x=results, path="submissions/submission12_logit_on_2_vars.csv")
+readr::write_csv(x=results, path="submissions/submission13_logit_on_2_vars.csv")
 
-# kaggle competitions submit bigdata2019-flare-prediction -f submissions/submission12_logit_on_2_vars.csv -m "My 12th submission: logistic regression on TOTBSQ and TOTUSJH with kurtosis and optCutOff"
+# kaggle competitions submit bigdata2019-flare-prediction -f submissions/submission13_logit_on_2_vars.csv -m "My 13th submission: logistic regression on TOTBSQ and TOTUSJH with quantiles and optCutOff"
 
 
 
