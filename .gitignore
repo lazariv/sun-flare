@@ -4,9 +4,8 @@
 .Ruserdata
 *.json
 *.zip
-trainingSet.RData
-testSet.RData
-fold1.RData
 *.h5
 *.hdf5
 sampleSubmission.csv
+*.png
+*.pdf
