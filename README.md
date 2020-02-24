@@ -1,3 +1,3 @@
-# ScaDS_DSC_flares
+# Sun Flares prediction
 
-subgroup of ScaDS project to work on Big Data Science Challenge
+My source code and submission files for Big Data Science Challenge on [Kaggle](https://www.kaggle.com/c/bigdata2019-flare-prediction) 
